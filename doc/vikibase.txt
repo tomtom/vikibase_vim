@@ -170,7 +170,7 @@ Textstyles~
 
 Comments (whole lines)~
 
-%%Comment
+%Comment
 
 
 Regions~
@@ -310,8 +310,8 @@ example: >
         return 'https://www.example.com/cgi/search.cgi?search='. surname .','. firstname
     endf
 
-    call VikiDefine('CONTACT', '*GetAddress("%%s")')
-    call VikiDefine('INDEX', '%%/foo/%%s/index.html')
+    call VikiDefine('CONTACT', '*GetAddress("%s")')
+    call VikiDefine('INDEX', '%/foo/%s/index.html')
 
 CONTACT::JohnDoe would the refer to 
 https://www.example.com/cgi/search.cgi?search=Dow,John and [[INDEX::bar]] 
@@ -389,8 +389,49 @@ file suffix if you choose a different suffix): >
     --regex-deplate=/\[\[[^\]]+\]\[([^\]]+)\]\]/\1/r,reference/
     --regex-deplate=/\[\[([^\]]+)\]\]/\1/r,reference/
     --regex-deplate=/([A-Z][a-z]+([A-Z][a-z]+)+)/\1/r,reference/
-    --regex-deplate=/([a-z]+:\/\/[A-Za-z0-9.:%%?=&_~@\/|-]+)/\1/u,url/
+    --regex-deplate=/([a-z]+:\/\/[A-Za-z0-9.:%?=&_~@\/|-]+)/\1/u,url/
 
 
 -----------------------------------------------------------------------
-%s
+========================================================================
+Contents~
+
+        g:vikiNameSuffix .............. |g:vikiNameSuffix|
+        g:viki_intervikis ............. |g:viki_intervikis|
+        :VikiDefine ................... |:VikiDefine|
+        g:viki#indent#desc ............ |g:viki#indent#desc|
+
+
+------------------------------------------------------------------------
+                                                    *plugin/viki.vim*
+                                                    *g:vikiNameSuffix*
+g:vikiNameSuffix               (default: ".viki")
+    Default file suffix (including the optional period, e.g. '.viki').
+    Can also be buffer-local.
+
+                                                    *g:viki_intervikis*
+g:viki_intervikis              (default: {})
+    Definition of intervikis. (This variable won't be evaluated until 
+    autoload/viki.vim is loaded).
+
+                                                    *:VikiDefine*
+VikiDefine NAME BASE ?SUFFIX
+    Define an interviki. See also |VikiDefine()|.
+
+
+------------------------------------------------------------------------
+                                                    *autoload/viki/indent.vim*
+                                                    *g:viki#indent#desc*
+g:viki#indent#desc             (default: 'sw')
+    Possible values: 'sw', '::'
+
+
+------------------------------------------------------------------------
+                                                    *autoload/viki/interviki.vim*
+
+    Define an interviki name
+    suffix == "*" -> g:vikiNameSuffix
+
+
+
+vim:tw=78:fo=w2croql:isk=!-~,^*,^|,^":ts=8:ft=help:norl:

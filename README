@@ -1,5 +1,5 @@
-This plugin provides (with respect to the original viki[0] #vimscript 861) a 
-slimmed-down |ftplugin| with support for syntax highlighting, indentation, and 
+This plugin provides a slimmed-down |ftplugin| (with respect to the original 
+viki[0] #vimscript 861) with support for syntax highlighting, indentation, and 
 folding. Hyperlinking is delegated to other plugins like the autolinker 
 plugin[1].
 
