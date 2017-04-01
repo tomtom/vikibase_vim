@@ -1,0 +1,83 @@
+" @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
+" @Website:     https://github.com/tomtom
+" @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
+" @Last Change: 2017-04-01
+" @Revision:    51
+
+
+function! viki#fold#MaybeInvalidateData(text) abort "{{{3
+    if exists('b:viki_fold_headings') && a:text =~ '^\*\+\s'
+        unlet b:viki_fold_headings
+    endif
+endf
+
+
+function! viki#fold#Foldexpr(lnum) abort "{{{3
+    if !exists('b:viki_fold_headings')
+        call s:MakeHeadingsData()
+    endif
+    return b:viki_fold_headings.GetFoldLevel(a:lnum)
+endf
+
+
+let s:prototype = {}
+
+function! s:prototype.GetFoldLevel(lnum) abort dict "{{{3
+    if has_key(self, 'level')
+        if self.lnum == a:lnum
+            return '>'. self.level
+        else
+            return self.level
+        endif
+    elseif has_key(self, 'mid')
+        if a:lnum < self.mid
+            return self.left.GetFoldLevel(a:lnum)
+        else
+            return self.right.GetFoldLevel(a:lnum)
+        endif
+    else
+        return -1
+    endif
+endf
+
+
+function! s:MakeHeadingsData() abort "{{{3
+    let l:lnums = []
+    let l:headings = {}
+    let l:pos = getpos('.')
+    try
+        let l:lnum = 0
+        while 1
+            let l:lnum += 1
+            exec l:lnum
+            norm! 0
+            let l:lnum = search('^\*\+\ze\s', 'ceW')
+            if l:lnum == 0
+                break
+            else
+                call add(l:lnums, l:lnum)
+                let l:headings[''. l:lnum] = col('.')
+            endif
+        endwh
+    finally
+        call setpos('.', l:pos)
+    endtry
+    let b:viki_fold_headings = s:Node(l:lnums, l:headings)
+endf
+
+
+function! s:Node(lnums, headings) abort "{{{3
+    let l:node = copy(s:prototype)
+    let l:llen = len(a:lnums)
+    if l:llen == 1
+        let l:node.lnum = a:lnums[0]
+        let l:node.level = a:headings[''. a:lnums[0]]
+    elseif l:llen > 1
+        let l:mid = l:llen / 2
+        let l:node.mid = a:lnums[l:mid]
+        let l:node.left = s:Node(a:lnums[0 : l:mid - 1], a:headings)
+        let l:node.right = s:Node(a:lnums[l:mid : -1], a:headings)
+    endif
+    return l:node
+endf
+

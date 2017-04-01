@@ -1,0 +1,396 @@
+*viki.txt*          A personal wiki for vim
+                    Author: Tom Link, micathom at gmail com
+
+This plugin provides (with respect to the original viki[0] #vimscript 861) a 
+slimmed-down |ftplugin| with support for syntax highlighting, indentation, and 
+folding. Hyperlinking is delegated to other plugins like the autolinker 
+plugin[1].
+
+The deplate[2] converter (written in ruby 1.8) can be used to convert viki 
+markup to LaTeX, HTML, or DocBook. On its homepage (http://deplate.sf.net) you 
+can also find a more detailed specification of the viki markup.
+
+[0] https://github.com/tomtom/viki_vim
+[1] https://github.com/tomtom/autolinker_vim
+[2] http://sourceforge.net/projects/deplate/
+
+
+-----------------------------------------------------------------------
+Install~
+
+Either use the zip archive:
+    - Download the zip archive
+    - Extract it to ~/.vim/pack/tml/start/vikibase_vim
+
+or install from github:
+    - Start a terminal
+    - Change the working directory to ~/.vim/pack/tml/start/
+    - Type: git clone https://github.com/tomtom/vikibase_vim
+
+NOTE: On Windows, ~/.vim might be ~/vimfiles. Please see 'runtimepath' for 
+details.
+
+
+Requirements~
+
+This script requires tlib (vimscript #1863) to be installed -- see 
+https://github.com/tomtom/tlib_vim.
+
+
+Optional enhancements~
+- vikitasks (vimscript #2894): Distributed TODO lists (discontinued plugin)
+- vxfold (vimscript #3004): Provides org-mode like fold cycling
+- VOoM (vimscript #2657): A two-pane outliner with support for viki
+
+
+Post-Install~
+
+Viki requires the following minimal lines to be added to |vimrc|: >
+
+    :set nocompatible
+    :filetype plugin indent on
+    :syntax on
+
+
+-----------------------------------------------------------------------
+                                                    *viki-markup*
+Markup~
+
+The pseudo markup is to some degree compatible with emacs-wiki, which in turn  
+is to some degree compatible with some other wiki -- i.e., it's compatible 
+enough to edit and work with files in emacs-wiki markup, but in some aspects 
+it's more restrictive. To convert viki markup to other formats, see the
+|deplate|.
+
+
+Hyperlinks~
+
+The following types of hyperlinks are supported: wiki names, extended links, 
+URLs.
+
+1. A word in CamelCase is a wiki name:
+    VikiName
+    VikiName#anchor
+
+   A wiki name may be prepended by an interviki.
+    OTHERVIKI::VikiName
+    OTHERVIKI::VikiName#there
+
+2. an extended wiki name of the form:
+
+        [[destination]]
+        [[OTHERVIKI::destination]]
+        [[destination][name]]
+        [[destination#anchor][name]]
+        [[#anchor]]
+        [[#anchor][name]]
+
+3. an URL
+
+
+Headings~
+
+* Level 1
+** Level 2
+...
+
+    NOTE: Headings can span more than one line by putting a backslash ('\') at 
+    the end of the line.
+
+    NOTE: If |g:vikiHeadingFont| is defined, the heading will be set in this 
+    font.
+
+
+Lists: (indented)~
+
+    - Item
+        * Item
+            + Item
+                1. Item 1
+                    a. Item a
+                    B. Item B
+        # Item
+            # Item 1
+            # Item 2
+                @ Item A
+                @ Item B
+
+NOTE: "@" (unordered lists) and "#" (ordered lists) are the preferred markers.
+
+
+Descriptions: (indented)~
+
+    Item :: Description
+
+
+Tables~
+
+|| Head || Category ||
+|  Row  |  Value     |
+#CAPTION: This Table
+#label
+
+NOTE: Rows can span more than one line by putting a backslash ('\') at the end 
+of the line.
+
+
+Symbols~
+
+<-, ->, <=, =>, <~, ~>, <->, <=>, <~>, !=, ~~, ..., --, ==
+
+
+Markers~
+
++++, ###, ???, !!!
+
+
+Strings~
+
+"Text in \"quotes\""
+
+NOTE: See also |g:vikiMarkupEndsWithNewline|.
+
+
+Textstyles~
+
+    __emphasized__, ''typewriter''
+
+<   NOTE: There must not be a whitespace after the opening mark.
+
+    NOTE: For the word styles, there must be a non-word character (|/\W|) 
+    before the opening mark, i.e. a__b__c will be highlighted as normal text -- 
+    it won't be highlighted. You could use the continuous markup for putting 
+    the "b" in the example in italic.
+
+    NOTE: If |g:vikiTypewriterFont| is defined, this font will be used to 
+    highlight text in typewriter style.
+
+    NOTE: See also |g:vikiMarkupEndsWithNewline|.
+
+
+Comments (whole lines)~
+
+%%Comment
+
+
+Regions~
+
+#Type [OPTIONS] <<EndOfRegion
+Text ...
+EndOfRegion
+
+For a list of supported regions see the |deplate| documentation.
+
+
+One-line commands~
+
+#COMMAND [OPTIONS]: ARGS
+
+OPTIONS have the form
+    - OPTION! ... set option to true
+    - OPTION=VALUE
+    - the characters "!" and "=" have to be escaped with a backslash
+
+Commands are applied only if the option "fmt" isn't given or if it matches the 
+formatter regexp.
+
+Short list of available COMMANDS "COMMAND" (see also |deplate|):
+    - INC: INCLUDED FILENAME
+    - FIG [here!|top!|bottom!]: FILENAME
+    - CAP [above!|below!]: TEXT
+    - TITLE: TEXT
+    - AUTHOR: TEXT
+    - AUTHORNOTE: TEXT
+    - DATE: [TEXT|now|today]
+    - MAKETITLE [page!]
+    - LIST [page!]: [contents|tables|figures|index]
+    - PAGE
+
+It depends on the formatter if these options have any effect.
+    - DOC ... document options
+    - OPT ... element options (applies to the previous element)
+
+
+Curly braces~
+
+Curly braces should be escaped with a backslash (i.e., \{ and \}), as they 
+usually mark macros: >
+
+    {MACRO [OPTIONS]: ARGS...}
+<
+Short list of available macros (see also |deplate|):
+    - {fn: ID}
+        - inserts a footnote as defined by in a Fn or Footnote region. 
+        - output depends on the formatter
+        - Example: >
+            Foo bar{fn: x} foo bar.
+
+            #Fn: x <<EOF
+                Bla bla.
+            EOF
+<   - {cite: ID}
+        - output depends on the formatter
+    - {date: [format string|now|today]}
+        - the format string uses ruby's strftime method.
+    - {ins: LITERALLY INSERTED TEXT}
+        - Example: {ins fmt=html: &lt;&lt;}
+    - {doc: ID}
+        - access document options, e.g. {opt: author}
+    - {opt: ID}
+        - access element (paragraph, table etc.) options
+    - {ruby [alt=ALTERNATIVE OUTPUT]: RUBY CODE}
+        - if the evaluation of ruby code is disabled, the text given in the 
+          alt option or an empty string will be inserted
+        - a sequence of ruby commands must be separated by semicolons
+
+Common options:
+    - fmt=FORMATTER, nofmt=UNMATCHED FORMATTER
+
+NOTE: Macros cannot cross paragraph borders, i.e., they must not contain empty 
+lines. Using newlines in a macro argument is useless, as the macro text will 
+be collapsed to one single line.
+
+
+Backslashes~
+
+    - A backslash at the end of the line should make a pattern include the 
+      next line.
+    - In general, a backslash should be an escape character that prevents the 
+      vikification of the following character.
+    - A backslash should itself be escaped by a backslash.
+
+\_nounderline_, \NoVikiName
+
+
+-----------------------------------------------------------------------
+                                                    *viki-intervikis*
+Intervikis~
+
+Later on, you probably want to define some intervikis. A |interviki| is a 
+shortcut to a different viki directory/namespace, so that you have to care 
+less about page names.
+
+There are two ways to define an interviki:
+
+    1. Use |VikiDefine()|: >
+
+       call VikiDefine('SCI', $HOME."/Projects/Sci/Ideas", ".txt")
+
+<      This command will automatically define a menu for each interviki 
+       (unless g:vikiMenuPrefix is empty) and it will also define a command 
+       with the name of the interviki that can be used to quickly access viki 
+       files from the vim command line.
+
+       The disadvantage of this approach is that you can define 
+       intervikis only after plugin/viki.vim was loaded -- e.g. in 
+       after/plugin/viki.vim.
+
+    2. Use |g:viki_intervikis| (a dictionary). The values can be either a list 
+       (arguments for |VikiDefine()|) or a string. >
+
+       let g:viki_intervikis = {}
+       let g:viki_intervikis['SCI']  = [$HOME."/Projects/Sci/Ideas", ".txt"]
+       let g:viki_intervikis['PROJ'] = $HOME."/Projects"
+
+<      This variable has to be set in vimrc before loading the vim 
+       plugin.
+
+Your newly defined interviki can then be accessed as SCI::ThisIdea, 
+which would refer to the file "~/Projects/Sci/Ideas/ThisIdea.txt".
+
+VikiDefine also defines a command (:SCI in this example) that opens a wiki's 
+index file (an optional 4th argument or "${g:vikiIndex}.${suffix}").
+
+Intervikis can also be defined as patterns or functions as in the following 
+example: >
+
+    fun! GetAddress(vikiname)
+        let surname = substitute(a:vikiname, '^\(\u.\{-}\)\(\u\U*\)\?$', '\1', '')
+        let firstname  = substitute(a:vikiname, '^\(\u.\{-}\)\(\u\U*\)\?$', '\2', '')
+        return 'https://www.example.com/cgi/search.cgi?search='. surname .','. firstname
+    endf
+
+    call VikiDefine('CONTACT', '*GetAddress("%%s")')
+    call VikiDefine('INDEX', '%%/foo/%%s/index.html')
+
+CONTACT::JohnDoe would the refer to 
+https://www.example.com/cgi/search.cgi?search=Dow,John and [[INDEX::bar]] 
+would refer to /foo/bar/index.html
+
+In order to use the LaTeX enabled viki variant, add this to your |vimrc| file: >
+
+    au FileType tex let b:vikiFamily="LaTeX"
+
+In order to automatically set |deplate| as the compiler for viki files: >
+
+    " we want to allow deplate to execute ruby code and external helper 
+    " application
+    let g:deplatePrg = "deplate -x -X "
+    au FileType viki compiler deplate
+
+
+-----------------------------------------------------------------------
+                                                    *viki-filetype-detection*
+Filetype detection~
+
+By default, the filetype of files matching the suffix defined in 
+|g:vikiNameSuffix| will be set to viki.
+
+You can also use |:autocmd| to set the filetype depending on the path: >
+
+    autocmd BufRead,BufNewFile $HOME/MyWiki/* set filetype=viki
+
+If the variables b:getVikiLink or b:getExtVikiLink exist, their values are 
+used as _function_ names for returning the current viki name's definition. A 
+viki definition is an array of the three elements name, destination, anchor.
+
+If the variables b:editVikiPage or b:createVikiPage exist, their values are 
+interpreted as _command_ names for editing readable or creating new wiki 
+pages.
+
+For a better highlighting of viki files, also check out these variables:
+
+    - |g:vikiTypewriterFont| (see |viki-textstyles|)
+    - |g:vikiHeadingFont| (see |viki-headings|)
+    - |g:vikiHyperLinkColor|
+    - |g:vikiInexistentColor|
+
+
+-----------------------------------------------------------------------
+                                                    *viki-compile*
+Viki Compile~
+
+The compile plugin simply defines |deplate| as the current file's |makeprg|. 
+It also provides basic support for |deplate|'s error messages.
+
+The compiler plugin provides a command for setting compiler options:
+
+    - DeplateSetCompiler [FLAGS]
+
+E.g. when using the lvimrc plugin, you could put something like this into the 
+current directorie's .lvimrc-file for putting the output into a dedicated 
+directory: >
+
+    DeplateSetCompiler -d ../html
+
+
+-----------------------------------------------------------------------
+                                                    *viki-tags*
+Ctags~
+
+For ctags support (e.g. in conjunction with taglist) add this to your .ctags 
+file (this assumes that *.viki files are in viki mode; you have to adjust the 
+file suffix if you choose a different suffix): >
+
+    --langdef=deplate
+    --langmap=deplate:.viki
+    --regex-deplate=/^(\*+ .+)/\1/s,structure/
+    --regex-deplate=/^(#[a-z][a-z0-9]+)/\1/s,structure/
+    --regex-deplate=/\[\[[^\]]+\]\[([^\]]+)\]\]/\1/r,reference/
+    --regex-deplate=/\[\[([^\]]+)\]\]/\1/r,reference/
+    --regex-deplate=/([A-Z][a-z]+([A-Z][a-z]+)+)/\1/r,reference/
+    --regex-deplate=/([a-z]+:\/\/[A-Za-z0-9.:%%?=&_~@\/|-]+)/\1/u,url/
+
+
+-----------------------------------------------------------------------
+%s
