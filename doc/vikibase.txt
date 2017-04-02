@@ -396,7 +396,7 @@ file suffix if you choose a different suffix): >
 ========================================================================
 Contents~
 
-        g:vikiNameSuffix .............. |g:vikiNameSuffix|
+        g:viki_name_suffix ............ |g:viki_name_suffix|
         g:viki_intervikis ............. |g:viki_intervikis|
         :VikiDefine ................... |:VikiDefine|
         g:viki#indent#desc ............ |g:viki#indent#desc|
@@ -404,8 +404,8 @@ Contents~
 
 ------------------------------------------------------------------------
                                                     *plugin/viki.vim*
-                                                    *g:vikiNameSuffix*
-g:vikiNameSuffix               (default: ".viki")
+                                                    *g:viki_name_suffix*
+g:viki_name_suffix             (default: ".viki")
     Default file suffix (including the optional period, e.g. '.viki').
     Can also be buffer-local.
 
@@ -430,7 +430,7 @@ g:viki#indent#desc             (default: 'sw')
                                                     *autoload/viki/interviki.vim*
 
     Define an interviki name
-    suffix == "*" -> g:vikiNameSuffix
+    suffix == "*" -> g:viki_name_suffix
 
 
 
