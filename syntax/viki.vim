@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     30-Dez-2003.
 " @Last Change: 2017-04-02.
-" @Revision: 77.1113
+" @Revision: 88.1113
 
 if exists('b:current_syntax')
     finish
@@ -24,31 +24,30 @@ syntax match vikiMarkers /\V\%(###\|???\|!!!\|+++\)/
 
 
 if has('conceal') && &encoding ==# 'utf-8'
-    " let s:sym_cluster = []
-    " for [s:name, s:chars, s:cchar] in [
-    "             \ ['Dash', '--', '—'],
-    "             \ ['Unequal', '!=', '≠'],
-    "             \ ['Identity', '==', '≡'],
-    "             \ ['Approx', '~~', '≈'],
-    "             \ ['ArrowLR', '<-\+>', '↔'],
-    "             \ ['ArrowL', '<-\+', '←'],
-    "             \ ['ArrowR', '-\+>', '→'],
-    "             \ ['ARROWLR', '<=\+>', '⇔'],
-    "             \ ['ARROWL', '<=\+', '⇐'],
-    "             \ ['ARROWR', '=\+>', '⇒'],
-    "             \ ['ArrowTildeLR', '<~\+>', '↭'],
-    "             \ ['ArrowTildeL', '<~\+', '↜'],
-    "             \ ['ArrowTildeR', '~\+>', '↝'],
-    "             \ ['Ellipsis', '...', '…'],
-    "             \ ['Circumflex', '\^\%({}\)\?', '^'],
-    "             \ ]
-    "
-    "     exec 'syntax match vikiSymbol'. s:name .' /\V'. s:chars .'/ conceal cchar='. s:cchar
-    "     call add(s:sym_cluster, 'vikiSymbol'. s:name)
-    " endfor
-    " syntax match vikiSymbolExtra /\V\%(&\%(#\d\+\|\w\+\);\)/
-    " exec 'syntax cluster vikiSymbols contains=vikiSymbolExtra,'. join(s:sym_cluster, ',')
-    " unlet! s:name s:chars s:cchar s:sym_cluster
+    let s:sym_cluster = []
+    for [s:name, s:chars, s:cchar] in [
+                \ ['Dash', '--', '—'],
+                \ ['Unequal', '!=', '≠'],
+                \ ['Identity', '==', '≡'],
+                \ ['Approx', '~~', '≈'],
+                \ ['ArrowLR', '<-\+>', '↔'],
+                \ ['ArrowL', '<-\+', '←'],
+                \ ['ArrowR', '-\+>', '→'],
+                \ ['ARROWLR', '<=\+>', '⇔'],
+                \ ['ARROWL', '<=\+', '⇐'],
+                \ ['ARROWR', '=\+>', '⇒'],
+                \ ['ArrowTildeLR', '<~\+>', '↭'],
+                \ ['ArrowTildeL', '<~\+', '↜'],
+                \ ['ArrowTildeR', '~\+>', '↝'],
+                \ ['Ellipsis', '...', '…'],
+                \ ['Circumflex', '^\%({}\)\?', '^'],
+                \ ]
+        exec 'syntax match vikiSymbol'. s:name .' /\V'. s:chars .'/ conceal cchar='. s:cchar
+        call add(s:sym_cluster, 'vikiSymbol'. s:name)
+    endfor
+    syntax match vikiSymbolExtra /\V\%(&\%(#\d\+\|\w\+\);\)/
+    exec 'syntax cluster vikiSymbols contains=vikiSymbolExtra,'. join(s:sym_cluster, ',')
+    unlet! s:name s:chars s:cchar s:sym_cluster
 else
     syntax match vikiSymbols /\V\%(--\|!=\|==\+\|~~\+\|<-\+>\|<=\+>\|<~\+>\|<-\+\|-\+>\|<=\+\|=\+>\|<~\+\|~\+>\|...\|&\%(#\d\+\|\w\+\);\)/
     syntax cluster vikiSymbols contains=vikiSymbols
