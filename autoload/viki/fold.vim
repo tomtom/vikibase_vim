@@ -1,14 +1,28 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Last Change: 2017-04-01
-" @Revision:    59
+" @Last Change: 2017-04-02
+" @Revision:    68
+
+
+if !exists('g:viki#fold#max_headings')
+    let g:viki#fold#max_headings = 1000   "{{{2
+endif
 
 
 function! viki#fold#MaybeInvalidateData(text) abort "{{{3
-    if exists('b:viki_fold_headings') && a:text =~ '^\*\+\s'
-        unlet b:viki_fold_headings
+    " Always invalidate the data
+    if !exists('b:viki_fold_headings_invalidated') && exists('b:viki_fold_headings')
+        let b:viki_fold_headings_invalidated = 1
+        au Viki CursorHold,CursorHoldI <buffer> call s:InvalidateData()
     endif
+endf
+
+
+function! s:InvalidateData() abort "{{{3
+    au! Viki CursorHold,CursorHoldI <buffer> call s:InvalidateData()
+    unlet! b:viki_fold_headings_invalidated
+    unlet! b:viki_fold_headings
 endf
 
 
@@ -16,7 +30,11 @@ function! viki#fold#Foldexpr(lnum) abort "{{{3
     if !exists('b:viki_fold_headings')
         call s:MakeHeadingsData()
     endif
-    return b:viki_fold_headings.GetFoldLevel(a:lnum)
+    if !exists('b:viki_fold_headings')
+        return -1
+    else
+        return b:viki_fold_headings.GetFoldLevel(a:lnum)
+    endif
 endf
 
 
@@ -72,7 +90,11 @@ function! s:MakeHeadingsData() abort "{{{3
     finally
         call setpos('.', l:pos)
     endtry
-    let b:viki_fold_headings = s:Node(l:lnums, l:headings)
+    if len(l:lnums) >= g:viki#fold#max_headings
+        setlocal foldexpr&
+    else
+        let b:viki_fold_headings = s:Node(l:lnums, l:headings)
+    endif
 endf
 
 

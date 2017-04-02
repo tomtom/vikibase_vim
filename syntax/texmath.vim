@@ -3,14 +3,12 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-11-15.
-" @Last Change: 2017-03-19.
-" @Revision:    24.0.76
+" @Last Change: 2017-04-02.
+" @Revision:    25.0.76
 
 " Use only as embedded syntax to be included from other syntax files.
 
-if version < 600
-    syntax clear
-elseif exists('b:current_syntax')
+if exists('b:current_syntax')
     finish
 endif
 scriptencoding utf-8

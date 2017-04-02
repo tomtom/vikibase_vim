@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com?subject=vim)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     12-Jän-2004.
-" @Last Change: 2017-04-01.
-" @Revision: 541
+" @Last Change: 2017-04-02.
+" @Revision: 543
 
 if exists("b:did_ftplugin") "{{{2
     finish
@@ -38,6 +38,7 @@ setlocal foldexpr=viki#fold#Foldexpr(v:lnum)
 " setlocal foldtext=viki#FoldText()
 
 augroup Viki
-	autocmd TextChanged,TextChangedI <buffer> call viki#fold#MaybeInvalidateData(getline('.'))
+	autocmd InsertLeave <buffer> call viki#fold#MaybeInvalidateData(getline('.'))
+	" autocmd TextChanged <buffer> call viki#fold#MaybeInvalidateData(getline('.'))
 augroup end
 

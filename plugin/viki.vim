@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com?subject=vim)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     08-Dec-2003.
-" @Last Change: 2017-04-01.
-" @Revision:    2802
+" @Last Change: 2017-04-02.
+" @Revision:    2803
 "
 " GetLatestVimScripts: 861 1 viki.vim
 "
@@ -27,10 +27,10 @@ endif
 let g:loaded_vikibase = 500
 
 
-if !exists("g:vikiNameSuffix")
+if !exists("g:viki_name_suffix")
     " Default file suffix (including the optional period, e.g. '.viki').
     " Can also be buffer-local.
-    let g:vikiNameSuffix = ".viki" "{{{2
+    let g:viki_name_suffix = ".viki" "{{{2
 endif
 
 if !exists('g:viki_intervikis')
@@ -83,8 +83,8 @@ command! -nargs=+ VikiDefine call VikiDefine(<f-args>)
 " command! -bar -bang -nargs=+ -complete=customlist,trag#CComplete Vikifind if exists(':Trag') == 2 | Trag<bang> --filenames --file_sources=*viki#FileSources <args> | else | echom ':Vikifind requires the trag_vim plugin to be installed!' | endif
 
 
-if !empty('g:vikiNameSuffix') && g:vikiNameSuffix !=# '.viki' && exists('#filetypedetect')
-    exec 'autocmd filetypedetect BufRead,BufNewFile *'. g:vikiNameSuffix .' if empty(&ft) | setf viki | endif'
+if !empty('g:viki_name_suffix') && g:viki_name_suffix !=# '.viki' && exists('#filetypedetect')
+    exec 'autocmd filetypedetect BufRead,BufNewFile *'. g:viki_name_suffix .' if empty(&ft) | setf viki | endif'
 endif
 
 
