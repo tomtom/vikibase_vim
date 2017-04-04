@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com?subject=vim)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     12-Jän-2004.
-" @Last Change: 2017-04-03.
-" @Revision: 551
+" @Last Change: 2017-04-04.
+" @Revision: 555
 
 if exists("b:did_ftplugin") "{{{2
     finish
@@ -23,12 +23,12 @@ let &l:define = '^\s*\(#Def.\{-}id=\|#\(Fn\|Footnote\).\{-}\(:\|id=\)\|#VAR.\{-}
 
 nnoremap <buffer> <silent> [[ ?^*\+\s<cr>
 nnoremap <buffer> <silent> ][ /^*\+\s<cr>
-nnoremap <buffer> <silent> ]] ][
-nnoremap <buffer> <silent> [] [[
+nmap     <buffer> <silent> ]] ][
+nmap     <buffer> <silent> [] [[
 
 let b:undo_ftplugin = 'setlocal iskeyword< expandtab< comments< commentstring< define< include< '
-            \ .'| nunmap <buffer> [['
-            \ .'| nunmap <buffer> ]]'
-            \ .'| nunmap <buffer> ]['
-            \ .'| nunmap <buffer> []'
+            \ .'| silent! nunmap <buffer> [['
+            \ .'| silent! nunmap <buffer> ]]'
+            \ .'| silent! nunmap <buffer> ]['
+            \ .'| silent! nunmap <buffer> []'
 
