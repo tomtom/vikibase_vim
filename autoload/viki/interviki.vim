@@ -1,8 +1,8 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Last Change: 2017-04-02
-" @Revision:    19
+" @Last Change: 2017-04-03
+" @Revision:    26
 
 
 if !exists('g:viki#interviki#edit_cmd')
@@ -44,6 +44,15 @@ function! viki#interviki#Define(name, prefix, ...) "{{{3
 endf
 
 
+function! viki#interviki#GetDest(interviki) abort "{{{3
+    let prefix = g:vikiInter{a:interviki}
+    if prefix !~# '[\/]$'
+        let prefix .= '/'
+    endif
+    return prefix
+endf
+
+
 " for l:sfx in ['e', 'b:viki_name_suffix', 'g:viki_name_suffix', 'b:vikiNameSuffix', 'g:vikiNameSuffix']
 "     if l:sfx ==# 'e'
 "         let l:suffix = '.'. expand('%:e')
@@ -59,17 +68,21 @@ endf
 "     endif
 " endfor
 
-" viki_name_suffix
 " " Get the suffix to use for viki filenames
-" function! viki#interviki#GetSuffix() "{{{3
-"     if exists('b:vikiNameSuffix')
-"         return b:vikiNameSuffix
-"     endif
-"     let sfx = expand("%:e")
-"     Tlibtrace 'viki', sfx
-"     if !empty(sfx)
-"         return '.'. sfx
-"     endif
-"     return g:vikiNameSuffix
+" function! viki#interviki#GetSuffix(link) "{{{3
+"     for l:sfx in ['e', 'b:viki_name_suffix', 'g:viki_name_suffix', 'b:vikiNameSuffix', 'g:vikiNameSuffix']
+"         if l:sfx ==# 'e'
+"             let l:suffix = '.'. expand('%:e')
+"         elseif exists(l:sfx)
+"             let l:suffix = eval(l:sfx)
+"         else
+"             continue
+"         endif
+"         let l:link = a:link . l:suffix
+"         if filereadable(l:link)
+"             return l:suffix
+"         endif
+"     endfor
+"     return ''
 " endf
 
