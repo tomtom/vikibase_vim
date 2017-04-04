@@ -1,15 +1,19 @@
 This plugin provides a slimmed-down |ftplugin| (with respect to the original 
 viki[0] #vimscript 861) with support for syntax highlighting, indentation, and 
-folding. Hyperlinking is delegated to other plugins like the autolinker 
-plugin[1].
+folding.
 
-The deplate[2] converter (written in ruby 1.8) can be used to convert viki 
+Some features are delegated to other plugins. Support for hyperlinking is 
+provided by the autolinker plugin[1]. Support for folding by the foldtext 
+plugin[2]
+
+The deplate[3] converter (written in ruby 1.8) can be used to convert viki 
 markup to LaTeX, HTML, or DocBook. On its homepage (http://deplate.sf.net) you 
 can also find a more detailed specification of the viki markup.
 
 [0] https://github.com/tomtom/viki_vim
 [1] https://github.com/tomtom/autolinker_vim
-[2] http://sourceforge.net/projects/deplate/
+[2] https://github.com/tomtom/foldtext_vim
+[3] http://sourceforge.net/projects/deplate/
 
 
 -----------------------------------------------------------------------
