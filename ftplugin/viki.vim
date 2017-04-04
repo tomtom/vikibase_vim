@@ -1,11 +1,9 @@
 " viki.vim -- the viki ftplugin
 " @Author:      Tom Link (micathom AT gmail com?subject=vim)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Created:     12-Jän-2004.
-" @Last Change: 2017-04-04.
-" @Revision: 555
+" @Revision: 557
 
-if exists("b:did_ftplugin") "{{{2
+if exists('b:did_ftplugin') "{{{2
     finish
 endif
 let b:did_ftplugin = 1
