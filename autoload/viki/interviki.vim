@@ -31,7 +31,7 @@ function! viki#interviki#Define(name, prefix, ...) "{{{3
     call sort(g:vikiInterVikiNames)
     let g:vikiInter{a:name}          = a:prefix
     let g:vikiInter{a:name}_suffix   = a:0 >= 1 && a:1 != '*' ? a:1 : g:viki_name_suffix
-    let index = a:0 >= 2 && !empty(a:2) ? tlib#file#Join([a:prefix, a:2]) . g:vikiInter{a:name}_suffix : a:prefix
+    let index = a:0 >= 2 && !empty(a:2) ? tlib#file#Join([a:prefix, a:2]) : a:prefix
     if exists(':'+ a:name) != 2
         if isdirectory(index)
             exec 'command! -bang' a:name g:viki#interviki#explore_cmd fnameescape(index)
