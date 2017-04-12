@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com?subject=vim)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     08-Dec-2003.
-" @Last Change: 2017-04-02.
-" @Revision:    2803
+" @Last Change: 2017-04-07.
+" @Revision:    2805
 "
 " GetLatestVimScripts: 861 1 viki.vim
 "
@@ -21,16 +21,16 @@
 " - vikitasks.vim (vimscript #2894)
 " - kpsewhich (not a vim plugin :-) for vikiLaTeX
 
-if &cp || exists("g:loaded_vikibase")
+if &cp || exists('g:loaded_vikibase')
     finish
 endif
 let g:loaded_vikibase = 500
 
 
-if !exists("g:viki_name_suffix")
+if !exists('g:viki_name_suffix')
     " Default file suffix (including the optional period, e.g. '.viki').
     " Can also be buffer-local.
-    let g:viki_name_suffix = ".viki" "{{{2
+    let g:viki_name_suffix = '.viki' "{{{2
 endif
 
 if !exists('g:viki_intervikis')

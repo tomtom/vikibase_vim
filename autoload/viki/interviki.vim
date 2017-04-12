@@ -1,8 +1,8 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Last Change: 2017-04-03
-" @Revision:    26
+" @Last Change: 2017-04-07
+" @Revision:    31
 
 
 if !exists('g:viki#interviki#edit_cmd')
@@ -23,21 +23,20 @@ let s:InterVikiRx = s:InterVikiNameRx .'::\(.*\)$'
 " :def: viki#interviki#Define(name, prefix, ?suffix="*", ?index="Index.${suffix}")
 " Define an interviki name
 " suffix == "*" -> g:viki_name_suffix
-function! viki#interviki#Define(name, prefix, ...) "{{{3
-    if a:name =~ '[^A-Z0-9]'
+function! viki#interviki#Define(name, prefix, ...) abort "{{{3
+    if a:name =~# '[^A-Z0-9]'
         throw 'Invalid interviki name: '. a:name
     endif
     call add(g:vikiInterVikiNames, a:name .'::')
     call sort(g:vikiInterVikiNames)
     let g:vikiInter{a:name}          = a:prefix
-    let g:vikiInter{a:name}_suffix   = a:0 >= 1 && a:1 != '*' ? a:1 : g:viki_name_suffix
+    let g:vikiInter{a:name}_suffix   = a:0 >= 1 && a:1 !=# '*' ? a:1 : g:viki_name_suffix
     let index = a:0 >= 2 && !empty(a:2) ? tlib#file#Join([a:prefix, a:2]) : a:prefix
     if exists(':'+ a:name) != 2
         if isdirectory(index)
-            exec 'command! -bang' a:name g:viki#interviki#explore_cmd fnameescape(index)
-        else
-            exec 'command! -bang' a:name g:viki#interviki#edit_cmd fnameescape(index)
+            let index .= '/'
         endif
+        exec 'command! -bang' a:name 'call feedkeys(":". '. string(g:viki#interviki#edit_cmd .' '. fnameescape(index)) .', "t")'
     else
         echom 'Viki: Command already exists. Cannot define a command for '+ a:name
     endif
@@ -69,7 +68,7 @@ endf
 " endfor
 
 " " Get the suffix to use for viki filenames
-" function! viki#interviki#GetSuffix(link) "{{{3
+" function! viki#interviki#GetSuffix(link) abort "{{{3
 "     for l:sfx in ['e', 'b:viki_name_suffix', 'g:viki_name_suffix', 'b:vikiNameSuffix', 'g:vikiNameSuffix']
 "         if l:sfx ==# 'e'
 "             let l:suffix = '.'. expand('%:e')
