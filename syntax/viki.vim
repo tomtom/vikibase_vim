@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com?subject=vim)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     30-Dez-2003.
-" @Last Change: 2017-04-02.
-" @Revision: 88.1113
+" @Last Change: 2017-04-20.
+" @Revision: 105.1113
 
 if exists('b:current_syntax')
     finish
@@ -55,13 +55,10 @@ endif
 
 syntax match vikiLink /\C\(\<[A-Z0-9_]\+::\)\?\%(\<\u\l\+\(\u[[:lower:]0-9]\+\)\+\>\)\(#\l\w*\>\)\?/
 if has('conceal')
-    " cchar=^
-    syntax region vikiExtendedLinkInfo matchgroup=vikiExtendedLinkMarkup start=/\[\[\(\(\\\[\|[^]]\)\+\]\[\)\?/ end=/\][!*]\?\]/ concealends contained containedin=vikiExtendedLink
-    syntax match vikiExtendedLink /\[\[\%(.\{-}\)\?\%(#.\{-}\)\?\]\%(\[[^]]\+\]\)\?[!~*$\-]*\]/ skipnl contains=vikiExtendedLinkInfo
+    syntax region vikiExtendedLink matchgroup=vikiExtendedLinkMarkup start=/\[\[\%([^]]\+\]\[\)\?/ end=/\][!~*$\-]*\]/ concealends keepend
 else
-    syntax match vikiExtendedLink /\[\[\%(.\{-}\)\?\%(#.\{-}\)\?\]\%(\[[^]]\+\]\)\?[!~*$\-]*\]/ skipnl
+    syntax match vikiExtendedLink /\[\[.\{-}\][!~*$\-]*\]/
 endif
-" exec "syntax match vikiURL /" . b:vikiUrlSimpleRx . "/"
 syntax cluster vikiHyperLinks contains=vikiLink,vikiExtendedLink
 
 if has('conceal')
@@ -193,9 +190,6 @@ unlet s:plquant
 syntax cluster vikiPriorityListGen contains=vikiPriorityListTodoGen,vikiPriorityListDoneX,vikiPriorityListDoneGen
 
 syntax sync minlines=2
-" syntax sync maxlines=50
-" syntax sync match vikiParaBreak /^\s*$/
-" syntax sync linecont /\\$/
 
 if &background ==# 'light'
     let s:cm1 = 'Dark'
