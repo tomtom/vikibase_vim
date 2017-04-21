@@ -2,10 +2,10 @@
 " @Author:      Tom Link (micathom AT gmail com?subject=vim)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     08-Dec-2003.
-" @Last Change: 2017-04-07.
-" @Revision:    2805
+" @Last Change: 2017-04-21.
+" @Revision:    2806
 "
-" GetLatestVimScripts: 861 1 viki.vim
+" GetLatestVimScripts: 5551 1 viki.vim
 "
 " Short Description:
 " This plugin adds wiki-like hypertext capabilities to any document.  
