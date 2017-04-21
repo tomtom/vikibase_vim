@@ -409,7 +409,7 @@ Contents~
 ------------------------------------------------------------------------
                                                     *plugin/viki.vim*
                                                     *g:viki_name_suffix*
-g:viki_name_suffix             (default: ".viki")
+g:viki_name_suffix             (default: '.viki')
     Default file suffix (including the optional period, e.g. '.viki').
     Can also be buffer-local.
 
