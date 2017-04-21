@@ -2,7 +2,7 @@
                     Author: Tom Link, micathom at gmail com
 
 This plugin provides a slimmed-down |ftplugin| (with respect to the original 
-viki[0] #vimscript 861) with support for syntax highlighting, indentation, and 
+viki[0] vimscript #861) with support for syntax highlighting, indentation, and 
 folding.
 
 Some features are delegated to other plugins. Support for hyperlinking is 
