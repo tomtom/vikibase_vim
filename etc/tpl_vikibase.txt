@@ -23,13 +23,15 @@ can also find a more detailed specification of the viki markup.
 Install~
 
 Either use the zip archive:
-    - Download the zip archive
-    - Extract it to ~/.vim/pack/tml/start/vikibase_vim
+
+- Download the zip archive
+- Extract it to ~/.vim/pack/tml/start/vikibase_vim
 
 or install from github:
-    - Start a terminal
-    - Change the working directory to ~/.vim/pack/tml/start/
-    - Type: git clone https://github.com/tomtom/vikibase_vim
+
+- Start a terminal
+- Change the working directory to ~/.vim/pack/tml/start/
+- Type: git clone https://github.com/tomtom/vikibase_vim
 
 NOTE: On Windows, ~/.vim might be ~/vimfiles. Please see 'runtimepath' for 
 details.
