@@ -1,8 +1,8 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Last Change: 2017-04-07
-" @Revision:    31
+" @Last Change: 2017-05-03
+" @Revision:    43
 
 
 if !exists('g:viki#interviki#edit_cmd')
@@ -29,14 +29,19 @@ function! viki#interviki#Define(name, prefix, ...) abort "{{{3
     endif
     call add(g:vikiInterVikiNames, a:name .'::')
     call sort(g:vikiInterVikiNames)
-    let g:vikiInter{a:name}          = a:prefix
+    let prefix = a:prefix
+    if prefix !~# '[\/]$'
+        let prefix .= '/'
+    endif
+    let g:vikiInter{a:name}          = prefix
     let g:vikiInter{a:name}_suffix   = a:0 >= 1 && a:1 !=# '*' ? a:1 : g:viki_name_suffix
-    let index = a:0 >= 2 && !empty(a:2) ? tlib#file#Join([a:prefix, a:2]) : a:prefix
+    if a:0 >= 2 && !empty(a:2)
+        let index = tlib#file#Join([prefix, a:2])
+    else
+        let index = prefix
+    endif
     if exists(':'+ a:name) != 2
-        if isdirectory(index)
-            let index .= '/'
-        endif
-        exec 'command! -bang' a:name 'call feedkeys(":". '. string(g:viki#interviki#edit_cmd .' '. fnameescape(index)) .', "t")'
+        exec 'command! -bang' a:name 'call feedkeys(":". '. string(g:viki#interviki#edit_cmd) .'." ". (<bang>0 ? '. string(fnameescape(index)) .' : '. string(fnameescape(prefix)) .'), "t")'
     else
         echom 'Viki: Command already exists. Cannot define a command for '+ a:name
     endif
