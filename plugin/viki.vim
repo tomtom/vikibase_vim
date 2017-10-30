@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com?subject=vim)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     08-Dec-2003.
-" @Last Change: 2017-04-21.
-" @Revision:    2806
+" @Last Change: 2017-10-30.
+" @Revision:    2807
 "
 " GetLatestVimScripts: 5551 1 viki.vim
 "
@@ -24,7 +24,7 @@
 if &cp || exists('g:loaded_vikibase')
     finish
 endif
-let g:loaded_vikibase = 500
+let g:loaded_vikibase = 501
 
 
 if !exists('g:viki_name_suffix')
