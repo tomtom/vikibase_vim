@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com?subject=vim)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     30-Dez-2003.
-" @Last Change: 2017-04-20.
-" @Revision: 105.1113
+" @Last Change: 2017-10-31.
+" @Revision: 108.1113
 
 if exists('b:current_syntax')
     finish
@@ -179,7 +179,7 @@ else
     syntax match vikiContact /\s\+\zs@[^[:punct:][:space:]]\+/ contained containedin=vikiPriorityListTodoGen
 endif
 
-let s:plquant = tlib#var#Get('vikiIndentedPriorityLists', 'wbg') ? '\+' : '*'
+let s:plquant = tlib#var#Get('vikiIndentedPriorityLists', 'wbg') || g:vikibase#tasks_must_be_indented ? '\+' : '*'
 
 exec 'syntax match vikiPriorityListTodoGen /^\s'. s:plquant .'\zs#\%(T: \+.\{-}\u.\{-}:\|\d*\u\d*\%(\s\+'. s:progress .'\)\?\)\s.*$/ contains=vikiContact,vikiTag,@vikiPriorityListTodo,@vikiText'
 exec 'syntax match vikiPriorityListDoneGen /^\s'. s:plquant .'\zs#\%(T: \+x\%([0-9%-]\+\)\?.\{-}\u.\{-}:\|\%(T: \+\)\?\d*\u\d* \+x'. s:progress .'\?\):\? .*/'
