@@ -402,10 +402,11 @@ file suffix if you choose a different suffix): >
 ========================================================================
 Contents~
 
-        g:viki_name_suffix ............ |g:viki_name_suffix|
-        g:viki_intervikis ............. |g:viki_intervikis|
-        :VikiDefine ................... |:VikiDefine|
-        g:viki#indent#desc ............ |g:viki#indent#desc|
+        g:viki_name_suffix ................... |g:viki_name_suffix|
+        g:viki_intervikis .................... |g:viki_intervikis|
+        :VikiDefine .......................... |:VikiDefine|
+        g:viki#indent#desc ................... |g:viki#indent#desc|
+        g:viki#interviki#special_protocols ... |g:viki#interviki#special_protocols|
 
 
 ------------------------------------------------------------------------
@@ -434,6 +435,11 @@ g:viki#indent#desc             (default: 'sw')
 
 ------------------------------------------------------------------------
                                                     *autoload/viki/interviki.vim*
+                                                    *g:viki#interviki#special_protocols*
+g:viki#interviki#special_protocols (default: 'https\?\|ftps\?\|nntp\|mailto\|mailbox\|file')
+    URLs matching these protocols are handled by |VikiOpenSpecialProtocol()|.
+    Can also be buffer-local.
+
 
     Define an interviki name
     suffix == "*" -> g:viki_name_suffix
