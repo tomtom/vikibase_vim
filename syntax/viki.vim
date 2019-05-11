@@ -2,13 +2,17 @@
 " @Author:      Tom Link (micathom AT gmail com?subject=vim)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     30-Dez-2003.
-" @Last Change: 2017-10-31.
-" @Revision: 110.1113
+" @Last Change: 2019-03-27.
+" @Revision: 113.1113
 
 if exists('b:current_syntax')
     finish
 endif
 scriptencoding utf-8
+
+if !exists('g:viki_syntax_highlight_wikiwords')
+    let g:viki_syntax_highlight_wikiwords = 0   "{{{2
+endif
 
 syntax spell toplevel
 
@@ -53,13 +57,19 @@ else
     syntax cluster vikiSymbols contains=vikiSymbols
 endif
 
-syntax match vikiLink /\C\(\<[A-Z0-9_]\+::\)\?\%(\<\u\l\+\(\u[[:lower:]0-9]\+\)\+\>\)\(#\l\w*\>\)\?/
 if has('conceal')
     syntax region vikiExtendedLink matchgroup=vikiExtendedLinkMarkup start=/\[\[\%([^]]\+\]\[\)\?/ end=/\][!~*$\-]*\]/ concealends keepend
 else
     syntax match vikiExtendedLink /\[\[.\{-}\][!~*$\-]*\]/
 endif
-syntax cluster vikiHyperLinks contains=vikiLink,vikiExtendedLink
+
+if g:viki_syntax_highlight_wikiwords
+    syntax match vikiLink /\C\(\<[A-Z0-9_]\+::\)\?\%(\<\u\l\+\(\u[[:lower:]0-9]\+\)\+\>\)\(#\l\w*\>\)\?/
+    syntax cluster vikiHyperLinks contains=vikiLink,vikiExtendedLink
+else
+    syntax cluster vikiHyperLinks contains=vikiExtendedLink
+endif
+
 
 if has('conceal')
     syntax region vikiBold matchgroup=NonText start=/\%(^\|\W\zs\)__\ze[^ 	_]/ end=/__\|\n\{2,}/ skip=/\\_\|\\\n/ contains=vikiEscapedChar,@Spell
